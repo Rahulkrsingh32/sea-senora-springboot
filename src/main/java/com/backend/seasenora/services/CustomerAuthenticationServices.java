@@ -47,7 +47,7 @@ public class CustomerAuthenticationServices implements UserDetailsService {
             return new SimpleGrantedAuthority(role.getRoleName());
         }).collect(Collectors.toList());
         UserDetails userDetails = new User(username, customer.getPassword(), grantedAuthorities);
-        log.info("Customer with" + username + "is present");
+        log.info("Customer with %1$s is present", username);
         return userDetails;
 
     }
@@ -55,7 +55,7 @@ public class CustomerAuthenticationServices implements UserDetailsService {
     public void registerUser(CustomerRequest customerRequest) {
         Optional<Customer> customer = customerRepo.findByUsername(customerRequest.getUsername());
         if (customer.isPresent()) {
-            log.error("Customer with " + customerRequest.getUsername() + "Already Exist by Trying to Signup again");
+            log.error("Customer with %1$s Already Exist by Trying to Signup again ", customerRequest.getUsername());
             throw new CustomerALLReadyExistException("User Already Exist");
         }
         Customer customer_temp = new Customer();
@@ -70,9 +70,9 @@ public class CustomerAuthenticationServices implements UserDetailsService {
             role_temp.setCustomer(customer_temp);
             return role_temp;
         }).collect(Collectors.toSet()));
-        log.info("Customer" + customerRequest.getUsername() + "Registration is in progress");
+        log.info("Customer %1$s Registration is in progress", customerRequest.getUsername());
         customerRepo.save(customer_temp);
-        log.info(customer_temp.getUsername() + " Registered Successfully");
+        log.info(customer_temp.getUsername(), "%1$s Registered Successfully");
     }
 
 }

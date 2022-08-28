@@ -13,6 +13,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.util.concurrent.SuccessCallback;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -60,7 +61,7 @@ public class HomeController {
                             customerRequestSignin.getPassword()));
 
         } catch (BadCredentialsException e) {
-            log.error("Customer" + customerRequestSignin.getUsername() + "Has entered Invalid Password");
+            log.error("Customer %1$s Has entered Invalid Password", customerRequestSignin.getUsername());
             throw new BadCredentialsException("Invalid Credentials");
 
         }
@@ -75,14 +76,14 @@ public class HomeController {
         customerResponse.setToken(token);
         customerResponse.setRoles(roles);
         customerResponse.setCustomerID(custService.getCustomerByUserName(user.getUsername()).getId());
-        log.info("customer" + user.getUsername() + "authenticated Successfully");
+        log.info("customer %1$s authenticated Successfully", user.getUsername());
         return ResponseEntity.ok(customerResponse);
     }
 
     @PostMapping("/signup")
     public ResponseEntity<SuccessResponse> signUp(@RequestBody CustomerRequest customerRequest) {
         customerAuthService.registerUser(customerRequest);
-        log.info(customerRequest.getUsername() + " " + "registered Successfully");
+        log.info("%1$s registered Successfully",customerRequest.getUsername());
         SuccessResponse successResponse = new SuccessResponse();
         successResponse.setSuccessMessage("User Registered Successfully");
         return new ResponseEntity<SuccessResponse>(successResponse, HttpStatus.CREATED);
@@ -101,7 +102,8 @@ public class HomeController {
         Customer customer = custService.getCustomerById(customerId);
         return new ResponseEntity(customer, HttpStatus.OK);
     }
-
+    
+    @CrossOrigin(origins = "http://localhost:4200")
     @DeleteMapping("/customer/{id}")
     public ResponseEntity deleteCustomer(@PathVariable("id") int customerId) {
         custService.deleteCustomerById(customerId);
@@ -109,7 +111,7 @@ public class HomeController {
     }
 
     @PostMapping("/customers/update")
-    public ResponseEntity updateCustomer(@RequestBody Customer customer) {
+    public ResponseEntity updateCustomer(@RequestBody Customer customer) { //NOSONAR
         custService.updateCustomer(customer.getId(), customer);
         return new ResponseEntity(HttpStatus.OK);
     }

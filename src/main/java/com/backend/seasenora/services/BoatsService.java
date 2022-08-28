@@ -24,6 +24,7 @@ public class BoatsService {
 		boat_temp.setMaxPassengers(boat.getMaxPassengers());
 		boat_temp.setRatePerDay(boat.getRatePerDay());
 		boatsRepository.save(boat_temp);
+		
 	}
 
 }

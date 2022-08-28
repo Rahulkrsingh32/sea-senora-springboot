@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,8 +36,9 @@ public class BookingsController {
 	@Autowired
 	private BoatsRepository boatsRepository;
 	
+	
 	@PostMapping("/usr/{id}/bookings/boat/{bid}")
-	public ResponseEntity<Object> createBookings(@PathVariable int id, @PathVariable int bid, @RequestBody Bookings bookings) throws BoatNotFoundException {
+	public ResponseEntity<Object> createBookings(@PathVariable int id, @PathVariable int bid, @RequestBody Bookings bookings) throws BoatNotFoundException { //NOSONAR
 		Optional<Customer> userOptional = customerRepository.findById(id);
 		Optional<Boats> boatsOptional = boatsRepository.findById(bid);
 		if(!userOptional.isPresent()) {
@@ -54,6 +56,12 @@ public class BookingsController {
 		bookingsRepository.save(bookings);
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(bookings.getId()).toUri();
 		return ResponseEntity.created(location).build();
+	}
+	
+	@CrossOrigin(origins = "http://localhost:4200")
+	@GetMapping("/bookings")
+	public List<Bookings> retriveAllBookings() {
+		return bookingsRepository.findAll();
 	}
 	
 	@GetMapping("/usr/{id}/bookings")

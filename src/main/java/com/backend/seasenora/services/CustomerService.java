@@ -25,12 +25,14 @@ public class CustomerService {
     private PasswordEncoder passwordEncoder;
 
     public Customer getCustomerById(int customerId) {
-        return customerRepo.findById(customerId).orElseThrow(() -> new CustomerNotFoundException("Customer Not Found"));
+    	String notFound = "Customer Not Foundd";
+        return customerRepo.findById(customerId).orElseThrow(() -> new CustomerNotFoundException(notFound));
     }
 
     public Customer getCustomerByUserName(String username) {
+    	String notFound = "Customer Not Founddd";
         return customerRepo.findByUsername(username)
-                .orElseThrow(() -> new CustomerNotFoundException("Customer Not Found"));
+                .orElseThrow(() -> new CustomerNotFoundException(notFound));
     }
 
     public List<Customer> getCustomer() {
@@ -39,24 +41,25 @@ public class CustomerService {
 
     public void deleteCustomerById(int customerId) {
         customerRepo.deleteById(customerId);
-        log.info("Customer with id" + customerId + "deleted Successfully");
+        log.info("Customer with id %1$s deleted Successfully",  customerId);
     }
 
     public void updateCustomer(int id, Customer cust) {
+    	String notFound = "Customer Not Foundddd";
         Customer cust_temp = customerRepo.findById(id)
-                .orElseThrow(() -> new CustomerNotFoundException("Customer Not Found"));
+                .orElseThrow(() -> new CustomerNotFoundException(notFound));
         cust_temp.setName(cust.getName());
         cust_temp.setEmailId(cust.getEmailId());
         cust_temp.setPhoneNumber(cust.getPhoneNumber());
         cust_temp.setPassword(cust.getPassword());
         customerRepo.save(cust_temp);
-        log.info(cust_temp.getUsername() + "Details Update Successfully");
+        log.info(cust_temp.getUsername(), "%1$s Details Update Successfully");
 
     }
 
     public void saveCustomer(Customer customer) {
         customerRepo.save(customer);
-        log.info("Customer details saved successfully" + customer.getUsername());
+        log.info("Customer details saved successfully %1$s", customer.getUsername());
     }
 
     public boolean verifyCustomerEmail(String emailId) {

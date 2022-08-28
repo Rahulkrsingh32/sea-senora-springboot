@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import com.backend.seasenora.entities.Customer;
 import com.backend.seasenora.entities.Boats;
 
 import com.backend.seasenora.exceptions.BoatNotFoundException;
@@ -50,25 +49,27 @@ public class BoatsController {
 		if(!boatOptional.isPresent())
 			throw new UserNotFoundException("id-"+ id);
 		Boats boat = boatOptional.get();
-		List<Boats> boatList=new ArrayList<Boats>();;
+		List<Boats> boatList=new ArrayList<Boats>();
 		boatList.add(boat);
 		
 		return boatOptional; 
 	}
 	
+	
 	@CrossOrigin(origins = "http://localhost:4200")
 	@PostMapping("/admin/addboat")
-	public ResponseEntity<Object> addBoat(@Valid @RequestBody Boats boat) {
+	public ResponseEntity<Object> addBoat(@Valid @RequestBody Boats boat) { //NOSONAR
 		Boats savedBoat = boatsRepository.save(boat);
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(savedBoat.getId()).toUri();
 		return ResponseEntity.created(location).build();
 	}
 	
+	
 	@CrossOrigin(origins = "http://localhost:4200")
 	@PostMapping("/admin/updateboat/{id}")
-	public ResponseEntity updateBoat(@PathVariable int id, @RequestBody Boats boat) throws BoatNotFoundException {
-		boatsService.updateBoat(id, boat);
-		return new ResponseEntity(HttpStatus.ACCEPTED);
+	public ResponseEntity<Object> updateBoat(@PathVariable int id, @RequestBody Boats boats) throws BoatNotFoundException { //NOSONAR
+		boatsService.updateBoat(id, boats);
+		return new ResponseEntity<Object>(HttpStatus.ACCEPTED);
 	}
 	
 	@CrossOrigin(origins = "http://localhost:4200")

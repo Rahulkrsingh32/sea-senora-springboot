@@ -62,7 +62,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/signup", "/signin","/boats","/admin/addboat","/boats/{id}","/admin/updateboat/{id}","/admin/deleteboat/{id}","/usr/{id}/bookings/boat/{id}","/usr/{id}/bookings","/bookings/{bid}/cancel" );
+        web.ignoring().antMatchers("/signup", "/signin","/customer","/bookings","/customer/{id}","/boats","/admin/addboat","/boats/{id}","/admin/updateboat/{id}","/admin/deleteboat/{id}","/usr/{id}/bookings/boat/{id}","/usr/{id}/bookings","/bookings/{bid}/cancel" );
     }
 
     @Bean
@@ -80,11 +80,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         corsConfiguration.setAllowCredentials(true);
         corsConfiguration.setAllowedOrigins(Collections.singletonList("http://localhost:4200"));
         corsConfiguration.setAllowedHeaders(Arrays.asList("Origin", "Access-Control-Allow-Origin", "Content-Type",
-                "Accept", "Jwt-Token", "Authorization", "Origin", "Accept",
+                "Accept", "Jwt-Token", "Authorization",
                 "X-Requested-With", "Access-Control-Request-Method",
                 "Access-Control-Request-Headers"));
         corsConfiguration.setExposedHeaders(Arrays.asList("Origin", "Content-Type",
-                "Accept", "Jwt-Token", "Authorization", "Access-Control-Allow-Origin",
+                "Accept", "Jwt-Token", "Authorization",
                 "Access-Control-Allow-Origin",
                 "Access-Control-Allow-Credentials", "Access-Control-Request-Method",
                 "Access-Control-Request-Headers"));
